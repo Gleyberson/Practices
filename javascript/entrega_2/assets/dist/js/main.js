@@ -6,6 +6,15 @@ let categories = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('rememberMe') === 'true') {
+        sessionStorage.setItem('loggedIn', 'true');
+    }
+    if (sessionStorage.getItem('loggedIn') !== 'true') {
+        alert('Debes iniciar sesión para acceder a esta página.');
+        location.href = 'login.html'; // Redirigir a la página de inicio de sesión
+    }
+    username = localStorage.getItem('username');
+    document.getElementById('usernameDisplay').textContent = username || 'Usuario';
     console.log(categories.length);
     let tiposUnicos = [];
     for (let i = 0; i < categories.length; i++) {
@@ -15,44 +24,44 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTable(categories[i].tipo);
         }
     }   
-    document.querySelectorAll('.monto-input').forEach(input => {
-        input.addEventListener('keyup', calcularTotales);
-    });
 });
 function renderTable(tipo) {
     console.log('Renderizando tabla para tipo:', tipo);
-    const tbody = document.querySelector('#tablecat'+tipo+' tbody');
+    const tbody = document.querySelector('#tablecat' + tipo + ' tbody');
+    tbody.innerHTML = '';
 
-    tbody.innerHTML = ''; 
+    console.log('Categorias:', categories);
 
-    categories
-        .filter(cat => cat.tipo === tipo)
-        .forEach((cat, index) => {
-            const tr = document.createElement('tr');
+    categories.forEach((cat, index) => {
+        if (cat.tipo !== tipo) return;  // salta si no coincide el tipo
 
-            tr.innerHTML = `
-                <th>${cat.nombre}</th>
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="bi bi-currency-dollar"></i>
-                        </span>
-                        <input type="number" class="form-control monto-input" data-tipo="${cat.tipo}" value="${cat.monto}" onchange="updateMonto(${index}, this.value)">
-                    </div>
-                </td>
-                <td><button class="btn btn-danger" onclick="eliminarItem(${index})">Eliminar</button></td>
-            `;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <th>${cat.nombre}</th>
+            <td>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-currency-dollar"></i>
+                    </span>
+                    <input type="number" name="inputMonto" class="form-control monto-input" data-tipo="${cat.tipo}" value="${cat.monto}" onchange="updateMonto(${index}, this.value)">
+                </div>
+            </td>
+            <td><button class="btn btn-danger" onclick="eliminarItem('${cat.tipo}', ${index})">Eliminar</button></td>
+        `;
 
-            tbody.appendChild(tr);
-        });
+        tbody.appendChild(tr);
+    });
+    document.querySelectorAll('.monto-input').forEach(input => {
+        input.addEventListener('keyup', calcularTotales);
+    });
 }
 function updateMonto(index, value) {
     categories[index].monto = parseFloat(value) || 0;
 }
 
-function eliminarItem(index) {
+function eliminarItem(tipo,index) {
     categories.splice(index, 1);
-    renderTable('ingreso'); // o 'gasto', según lo que estés viendo
+    renderTable(tipo);
 }
 
 function agregarItem(tipo, nombre) {
@@ -94,15 +103,15 @@ function calcularTotales (){
     let ahorro = total.ingreso - total.gasto;
     // Mostrar resultados
     document.getElementById('total-ingreso').textContent = total.ingreso.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-});
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
     document.getElementById('total-gasto').textContent = total.gasto.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-});
-    document.getElementById('total-ahorro').textContent = ahorro.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-});
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+        document.getElementById('total-ahorro').textContent = ahorro.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
