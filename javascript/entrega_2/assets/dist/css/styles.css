@@ -1,3 +1,4 @@
+
  .bd-placeholder-img {
      font-size: 1.125rem;
      text-anchor: middle;
@@ -103,3 +104,45 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.ingreso_title,
+.gasto_title,
+.ahorro_title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.ingreso_num{
+    color: #53b721;
+
+}
+.gasto_num{
+    color: #cf5c09;
+}
+.ahorro_num{
+    color: #47bcd8;
+}
+.ingreso_num,
+.gasto_num,
+.ahorro_num {
+    font-size: 2.25rem;
+    font-weight: 600;
+} 
+.ingreso_mes,
+.gasto_mes,
+.ahorro_mes {
+    font-weight: 600;
+    color: rgb(122, 122, 122);
+}
+.card_ingreso,
+.card_gasto,
+.card_ahorro {
+    color: #080808 !important;
+}
+.card_ingreso{
+    background-color: #e2f4d9;
+}
+.card_gasto{
+    background-color: #fee6d7;
+}
+.card_ahorro{
+    background-color: #c2ebf4;
+}   

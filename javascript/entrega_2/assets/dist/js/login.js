@@ -22,6 +22,10 @@ function login(username, password, rememberMe) {
         }
         location.href = 'index.html'; // Redirigir a la página principal
     } else {
-        alert('Credenciales incorrectas');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Credenciales incorrectas',
+        });
     }
 }

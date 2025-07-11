@@ -15,11 +15,13 @@
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/dist/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
 
     <!-- js -->
     <script src="assets/dist/js/color-modes.js"></script>
     <script defer src="assets/dist/js/bootstrap.bundle.min.js"></script>
-    <script defer src="assets/dist/js/index.js"></script>
+    <script defer src="assets/dist/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     
 </head>
@@ -38,67 +40,112 @@
         </header>
         <main>
             <h1 class="text-body-emphasis">Instrucciones</h1>
-            <p class="fs-5 col-md-8">Simule los gastos del mes. Crea presupuestos mensuales.</p>
+            <p class="fs-5 col-md-8">Simule los gastos del mes en las diferentes categorías, Puede agregar categorias si lo desea</p>
             <hr class="col-3 col-md-2 mb-5">
+            <div class="col-md-7 mb-4 ">
+                <label for="nombrePresupuesto" class="form-label fw-bold">Nombre del presupuesto</label>
+                <input type="text" class="form-control me-2" id="nombrePresupuesto" placeholder="Nombre del presupuesto (ej: Julio 2025)">
+            </div>
+
             <div class="row g-5">
-                <div class="col-md-12">
-                    <h2 class="text-body-emphasis pb-3 border-bottom">Orden Financiero</h2>
-                    <p class="fs-3">Presupuestos Mensuales</p>
-                    <div class="card" style="width: 18rem; min-height: 7rem;">
-                        <div class="card-body d-flex flex-column justify-content-between h-100">
-                            <h5 class="card-title mb-4" id="presupuesto-title">Crear presupuesto del mes</h5>
-                            <div class="d-flex justify-content-end align-items-end flex-grow-1">
-                                <a href="#" id="add-budget" style="font-size: 2rem;">
-                                    <i class="bi bi-plus-circle"></i>
-                                </a>
+                <div class="col-md-7">
+                    <h2 class="text-body-emphasis pb-3 border-bottom">Categorias</h2>
+                    <p class="fs-3"><i class="bi bi-graph-up-arrow"></i> Ingresos</p>
+                        <table id="tablecatingreso" class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Monto</th>
+                                <th scope="col"> </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <!-- se auto genera en el javascript -->
+                        </tbody>
+                        </table>
+                        <!-- <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-success" onclick="guardarCategorias()">
+                                <i class="bi bi-save"></i> Guardar Ingresos
+                            </button>
+                        </div> -->
+                        <div class="row g-3 align-items-center mb-3">
+                            <div class="col-auto">
+                                <input type="text" class="form-control" id="nuevoNombre" placeholder="nombre de ingreso">
+                                
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" onclick="agregarItem('ingreso', document.getElementById('nuevoNombre').value)">Agregar Ingreso</button>
+                            </div>
+                        </div>
+                        <hr class="col-12 pb-3 mb-1">
+                        <p class="fs-3"><i class="bi bi-graph-down-arrow"></i> Gastos</p>
+                        <table id="tablecatgasto" class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Monto</th>
+                                <th scope="col"> </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <!-- se auto genera en el javascript -->
+                        </tbody>
+                        </table>
+                        <!-- <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-success" onclick="guardarCategorias()">
+                                <i class="bi bi-save"></i> Guardar Gastos
+                            </button>
+                        </div> -->
+                        <div class="row g-3 align-items-center mb-3">
+                            <div class="col-auto">
+                                <input type="text" class="form-control" id="nuevoNombreGasto" placeholder="nombre del gasto">
+                                
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" onclick="agregarItem('gasto', document.getElementById('nuevoNombreGasto').value)">Agregar Gasto</button>
+                            </div>
+                        </div>
+                </div>
+                
+                <div class="col-md-5">
+                    <h2 class="text-body-emphasis">Resumen de presupuesto 📊</h2>
+                    <div class="row mb-5">   
+                        <div class="card card_ingreso" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title ingreso_title"><i class="bi bi-graph-up-arrow"></i> Ingreso Total</h5>
+                                <h6 class="card-subtitle ingreso_num"> $<span id="total-ingreso">0</span></h6>
+                                <p class="card-text ingreso_mes">Al mes</p>
+        
+                            </div>
+                        </div>
+                    </div>
+                     <div class="row mb-5">   
+                        <div class="card card_gasto" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title gasto_title"><i class="bi bi-graph-down-arrow"></i> Gasto Total</h5>
+                                <h6 class="card-subtitle gasto_num"> $<span id="total-gasto">0</span></h6>
+                                <p class="card-text gasto_mes">Al mes</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">   
+                        <div class="card card_ahorro" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title ahorro_title"><i class="bi bi-piggy-bank"></i> Ahorro Total</h5>
+                                <h6 class="card-subtitle ahorro_num">$<span id="total-ahorro">0</span></h6>
+                                <p class="card-text ahorro_mes">Al mes </p>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="row g-3 mt-4" id="presupuestos-lista">
-                <!-- Aquí se insertarán las tarjetas de presupuestos guardados -->
-            </div>
-
-            <hr class="col-3 col-md-2 mb-5">
-            <div class="row g-5">
-                <div class="col-md-12">
-                    <h2 class="text-body-emphasis">Resumen de tus presupuestos 📊</h2>
-                    <div class="row mb-5">  
-                        <div class="col-md-4">
-                            <div class="card card_ingreso" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title ingreso_title"><i class="bi bi-graph-up-arrow"></i> Ingreso Total</h5>
-                                    <h6 class="card-subtitle ingreso_num"> $<span id="total-ingreso">0</span></h6>
-                                    <p class="card-text ingreso_mes">Sumados</p>
-            
-                                </div>
-                            </div>                            
-                        </div> 
-
-                        <div class="col-md-4">
-                            <div class="card card_gasto" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title gasto_title"><i class="bi bi-graph-down-arrow"></i> Gasto Total</h5>
-                                    <h6 class="card-subtitle gasto_num"> $<span id="total-gasto">0</span></h6>
-                                    <p class="card-text gasto_mes">Sumados</p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card_ahorro" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title ahorro_title"><i class="bi bi-piggy-bank"></i> Ahorro Total</h5>
-                                    <h6 class="card-subtitle ahorro_num">$<span id="total-ahorro">0</span></h6>
-                                    <p class="card-text ahorro_mes">Sumados </p>
-
-                                </div>
-                            </div>
-                        </div>    
-                        
-                </div>
+            <div class="mt-4">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle"></i> Volver al inicio
+                </a>
+                <button class="btn btn-primary" onclick="guardarPresupuesto()">Guardar Presupuesto</button>
             </div>
         </main>
         <footer class="pt-5 my-5 text-body-secondary border-top">
@@ -169,3 +216,4 @@
             <title>Bootstrap</title>
             <path fill-rule="evenodd" clip-rule="evenodd"
                 d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 01
+
